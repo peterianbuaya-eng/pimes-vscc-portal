@@ -42,14 +42,14 @@ const StudentProfile = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <button className="btn btn-outline" onClick={() => navigate('/students')} style={{ padding: '8px' }}>
           <ArrowLeft size={16} />
         </button>
         <h1 style={{ fontSize: '24px', margin: 0 }}>Student Profile</h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px' }}>
+      <div className="grid-mobile-stack" style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px' }}>
         {/* Profile Sidebar */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <img src={student.photo} alt={student.name} className="avatar" style={{ width: '100px', height: '100px', marginBottom: '16px' }} />
@@ -119,7 +119,7 @@ const StudentProfile = () => {
             {activeTab === 'attendance' && (
               <div>
                 <h3 style={{ fontSize: '16px', marginBottom: '16px' }}>One-Tap Attendance (Today)</h3>
-                <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap' }}>
                   <button className="btn btn-outline" style={{ color: 'var(--color-success)', borderColor: 'var(--color-success)' }} onClick={() => handleMarkAttendance('Present')}>
                     <Check size={16} /> Present
                   </button>
@@ -135,77 +135,81 @@ const StudentProfile = () => {
                 </div>
 
                 <h3 style={{ fontSize: '16px', marginBottom: '16px' }}>Attendance History</h3>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                    {studentAttendance.map(record => (
-                      <tr key={record.id}>
-                        <td>{record.date}</td>
-                        <td>
-                          <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
-                            {record.status}
-                          </span>
-                        </td>
+                <div className="table-responsive">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
+                      {studentAttendance.map(record => (
+                        <tr key={record.id}>
+                          <td>{record.date}</td>
+                          <td>
+                            <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
+                              {record.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
             {activeTab === 'payments' && (
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
                   <h3 style={{ fontSize: '16px' }}>Payment History</h3>
                   <button className="btn btn-primary" onClick={handleAddPayment}>
                     <CreditCard size={16} /> Record Payment (Today)
                   </button>
                 </div>
                 
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Amount</th>
-                      <th>Method</th>
-                      <th>Receipt</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentPayments.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                    {studentPayments.map(record => (
-                      <tr key={record.id}>
-                        <td>{record.date}</td>
-                        <td>₱{record.amount.toLocaleString()}</td>
-                        <td>{record.method}</td>
-                        <td>{record.receipt}</td>
-                        <td>
-                          <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
-                            {record.status}
-                          </span>
-                        </td>
-                        <td>
-                          <button 
-                            className="btn btn-outline" 
-                            style={{ padding: '4px 8px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
-                            onClick={() => removePayment(record.id)}
-                            title="Undo Payment"
-                          >
-                            <X size={14} style={{ marginRight: '4px' }} /> Undo
-                          </button>
-                        </td>
+                <div className="table-responsive">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Receipt</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {studentPayments.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
+                      {studentPayments.map(record => (
+                        <tr key={record.id}>
+                          <td>{record.date}</td>
+                          <td>₱{record.amount.toLocaleString()}</td>
+                          <td>{record.method}</td>
+                          <td>{record.receipt}</td>
+                          <td>
+                            <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
+                              {record.status}
+                            </span>
+                          </td>
+                          <td>
+                            <button 
+                              className="btn btn-outline" 
+                              style={{ padding: '4px 8px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                              onClick={() => removePayment(record.id)}
+                              title="Undo Payment"
+                            >
+                              <X size={14} style={{ marginRight: '4px' }} /> Undo
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
