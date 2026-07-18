@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, CalendarDays, FileBarChart, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, CalendarDays, FileBarChart, LogOut, Settings, Menu } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 const Layout = () => {
@@ -11,6 +11,11 @@ const Layout = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [newUsername, setNewUsername] = useState(adminCreds.username);
   const [newPassword, setNewPassword] = useState(adminCreds.password);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location]);
 
   const handleSaveSettings = (e) => {
     e.preventDefault();
@@ -26,9 +31,13 @@ const Layout = () => {
 
   return (
     <div className="app-container">
-      <aside className="sidebar">
-        <div className="sidebar-header">
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className="sidebar-title">PIMES VSCC Portal</div>
+          <button className="btn btn-outline mobile-menu-toggle" style={{ padding: '4px 8px', borderColor: 'transparent' }} onClick={() => setIsSidebarOpen(false)}>✕</button>
         </div>
         <nav style={{ flex: 1 }}>
           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end>
@@ -57,8 +66,13 @@ const Layout = () => {
       
       <main className="main-content">
         <header className="topbar">
-          <div className="topbar-title" style={{ textTransform: 'capitalize' }}>
-            {location.pathname === '/' ? 'Dashboard' : location.pathname.substring(1)}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button className="btn btn-outline mobile-menu-toggle" style={{ padding: '6px' }} onClick={() => setIsSidebarOpen(true)}>
+              <Menu size={18} />
+            </button>
+            <div className="topbar-title" style={{ textTransform: 'capitalize' }}>
+              {location.pathname === '/' ? 'Dashboard' : location.pathname.substring(1)}
+            </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <button className="btn btn-outline" style={{ padding: '6px' }} onClick={() => setShowSettings(true)}>

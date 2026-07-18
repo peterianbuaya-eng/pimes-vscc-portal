@@ -36,10 +36,10 @@ const StudentPortal = () => {
       ))}
       <h1 style={{ fontSize: '28px', marginBottom: '24px' }}>Welcome back, {student.name.split(',')[1]?.trim() || student.name}!</h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '24px' }}>
+      <div className="grid-mobile-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '24px' }}>
         {/* Left Column: Main Tabs */}
         <div className="card" style={{ padding: 0, height: 'fit-content' }}>
-          <div style={{ display: 'flex', borderBottom: '1px solid var(--color-border)' }}>
+          <div className="tabs-scroll-mobile" style={{ display: 'flex', borderBottom: '1px solid var(--color-border)' }}>
             <div 
               style={{ padding: '16px 24px', cursor: 'pointer', fontWeight: '500', color: activeTab === 'overview' ? 'var(--color-primary)' : 'var(--color-text-secondary)', borderBottom: activeTab === 'overview' ? '2px solid var(--color-primary)' : '2px solid transparent' }}
               onClick={() => setActiveTab('overview')}
@@ -91,7 +91,7 @@ const StudentPortal = () => {
 
                 <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>How to Pay</h3>
                 <div style={{ padding: '16px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                  <div style={{ display: 'flex', gap: '24px' }}>
+                  <div className="flex-mobile-stack" style={{ display: 'flex', gap: '24px' }}>
                     <div style={{ flex: 1 }}>
                       <h4 style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <CreditCard size={18} color="var(--color-primary)" /> Cash Payment
@@ -100,7 +100,7 @@ const StudentPortal = () => {
                         Simply pay face-to-face during your scheduled lesson.
                       </p>
                     </div>
-                    <div style={{ width: '1px', backgroundColor: 'var(--color-border)' }}></div>
+                    <div className="mobile-divider" style={{ width: '1px', backgroundColor: 'var(--color-border)' }}></div>
                     <div style={{ flex: 1 }}>
                       <h4 style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <CreditCard size={18} color="var(--color-primary)" /> GCash
@@ -132,58 +132,62 @@ const StudentPortal = () => {
             {activeTab === 'attendance' && (
               <div>
                 <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>Attendance Record</h3>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                    {studentAttendance.map(record => (
-                      <tr key={record.id}>
-                        <td>{record.date}</td>
-                        <td>
-                          <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
-                            {record.status}
-                          </span>
-                        </td>
+                <div className="table-responsive">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
+                      {studentAttendance.map(record => (
+                        <tr key={record.id}>
+                          <td>{record.date}</td>
+                          <td>
+                            <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
+                              {record.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
             {activeTab === 'payments' && (
               <div>
                 <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>Payment History</h3>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Amount</th>
-                      <th>Method</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentPayments.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                    {studentPayments.map(record => (
-                      <tr key={record.id}>
-                        <td>{record.date}</td>
-                        <td>₱{record.amount.toLocaleString()}</td>
-                        <td>{record.method}</td>
-                        <td>
-                          <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
-                            {record.status}
-                          </span>
-                        </td>
+                <div className="table-responsive">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {studentPayments.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
+                      {studentPayments.map(record => (
+                        <tr key={record.id}>
+                          <td>{record.date}</td>
+                          <td>₱{record.amount.toLocaleString()}</td>
+                          <td>{record.method}</td>
+                          <td>
+                            <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
+                              {record.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 

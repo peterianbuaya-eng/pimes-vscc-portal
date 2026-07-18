@@ -23,37 +23,39 @@ const StudentsList = () => {
             <input type="text" placeholder="Search students..." style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%' }} />
           </div>
         </div>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Contact</th>
-              <th>Parent/Guardian</th>
-              <th>Schedule</th>
-              <th>Monthly Fee</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map(student => (
-              <tr key={student.id} onClick={() => navigate(`/students/${student.id}`)} style={{ cursor: 'pointer' }}>
-                <td>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <img src={student.photo} alt={student.name} className="avatar" />
-                    <span style={{ fontWeight: '500' }}>{student.name}</span>
-                  </div>
-                </td>
-                <td>{student.contactNumber}</td>
-                <td>{student.parentGuardian}</td>
-                <td>{student.schedule}</td>
-                <td>₱{student.monthlyFee?.toLocaleString()}</td>
-                <td>
-                  <span className="badge badge-success">Active</span>
-                </td>
+        <div className="table-responsive">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Contact</th>
+                <th>Parent/Guardian</th>
+                <th>Schedule</th>
+                <th>Monthly Fee</th>
+                <th>Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {students.map(student => (
+                <tr key={student.id} onClick={() => navigate(`/students/${student.id}`)} style={{ cursor: 'pointer' }}>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img src={student.photo} alt={student.name} className="avatar" />
+                      <span style={{ fontWeight: '500' }}>{student.name}</span>
+                    </div>
+                  </td>
+                  <td>{student.contactNumber}</td>
+                  <td>{student.parentGuardian}</td>
+                  <td>{student.schedule}</td>
+                  <td>₱{student.monthlyFee?.toLocaleString()}</td>
+                  <td>
+                    <span className="badge badge-success">Active</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
