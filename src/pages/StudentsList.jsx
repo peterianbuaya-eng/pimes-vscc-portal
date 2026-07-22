@@ -9,7 +9,7 @@ const StudentsList = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '24px' }}>Students Directory</h1>
         <button className="btn btn-primary" onClick={() => navigate('/students/new')}>
           <Plus size={16} /> Add Student
@@ -18,7 +18,7 @@ const StudentsList = () => {
 
       <div className="card" style={{ padding: '0' }}>
         <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--color-border)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--color-bg-subtle)', padding: '8px 12px', borderRadius: '4px', width: '100%', maxWidth: '300px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--color-bg-subtle)', padding: '8px 12px', borderRadius: '4px', width: '300px' }}>
             <Search size={16} color="var(--color-text-secondary)" />
             <input type="text" placeholder="Search students..." style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%' }} />
           </div>

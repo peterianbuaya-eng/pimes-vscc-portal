@@ -9,12 +9,14 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import StudentsList from './pages/StudentsList';
 import StudentProfile from './pages/StudentProfile';
+import AddStudent from './pages/AddStudent';
 import { CalendarView } from './pages/CalendarView';
 import { ReportsView } from './pages/PlaceholderViews';
 import StudentPortal from './pages/StudentPortal';
 
 const ProtectedRoute = ({ children, allowedRole }) => {
-  const { currentUser } = useAppContext();
+  const { currentUser, loading } = useAppContext();
+  if (loading) return <div style={{ padding: '32px' }}>Loading portal…</div>;
   
   if (!currentUser) return <Navigate to="/login" replace />;
   if (currentUser.role !== allowedRole) {
@@ -33,6 +35,7 @@ const AppRoutes = () => {
       <Route path="/" element={<ProtectedRoute allowedRole="admin"><Layout /></ProtectedRoute>}>
         <Route index element={<Dashboard />} />
         <Route path="students" element={<StudentsList />} />
+        <Route path="students/new" element={<AddStudent />} />
         <Route path="students/:id" element={<StudentProfile />} />
         <Route path="calendar" element={<CalendarView />} />
         <Route path="reports" element={<ReportsView />} />

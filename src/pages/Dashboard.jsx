@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 
 const Modal = ({ title, onClose, children }) => (
   <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-    <div className="card" style={{ width: '500px', maxHeight: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+    <div className="card" style={{ width: '90%', maxWidth: '500px', maxHeight: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
         <h2 style={{ fontSize: '18px', margin: 0 }}>{title}</h2>
         <button className="btn btn-outline" style={{ padding: '4px 8px', borderColor: 'transparent' }} onClick={onClose}>✕</button>

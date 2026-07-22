@@ -6,27 +6,24 @@ import { useAppContext } from '../context/AppContext';
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, adminCreds, updateAdminCredentials } = useAppContext();
+  const { logout, importLocalData } = useAppContext();
   
   const [showSettings, setShowSettings] = useState(false);
-  const [newUsername, setNewUsername] = useState(adminCreds.username);
-  const [newPassword, setNewPassword] = useState(adminCreds.password);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location]);
 
-  const handleSaveSettings = (e) => {
-    e.preventDefault();
-    updateAdminCredentials(newUsername, newPassword);
-    alert('Admin credentials updated successfully!');
-    setShowSettings(false);
-  };
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleImport = async () => {
+    try { await importLocalData(); alert('Old browser data has been copied to the shared database.'); setShowSettings(false); }
+    catch (err) { alert(err.message); }
   };
 
   return (
@@ -88,22 +85,13 @@ const Layout = () => {
 
       {showSettings && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="card" style={{ width: '400px' }}>
+          <div className="card" style={{ width: '90%', maxWidth: '400px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
               <h2 style={{ fontSize: '18px', margin: 0 }}>Admin Settings</h2>
               <button className="btn btn-outline" style={{ padding: '4px 8px', borderColor: 'transparent' }} onClick={() => setShowSettings(false)}>✕</button>
             </div>
-            <form onSubmit={handleSaveSettings}>
-              <div className="form-group">
-                <label className="form-label">Admin Username</label>
-                <input type="text" className="form-control" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} required />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Admin Password</label>
-                <input type="text" className="form-control" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-              </div>
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }}>Save Changes</button>
-            </form>
+            <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>Your account is secured by Supabase. Use the password reset option in the login service if you need to change the administrator password.</p>
+            <button className="btn btn-outline" onClick={handleImport}>Import old browser data</button>
           </div>
         </div>
       )}

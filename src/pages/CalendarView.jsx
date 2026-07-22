@@ -48,7 +48,7 @@ export const CalendarView = () => {
         <div className="card" style={{ marginBottom: '24px', backgroundColor: 'var(--color-bg-subtle)' }}>
           <h3 style={{ marginBottom: '16px' }}>{editingId ? 'Edit Reminder' : 'New Reminder'}</h3>
           <form onSubmit={handleSave}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="grid-mobile-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Title / Event</label>
                 <input type="text" className="form-control" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required placeholder="e.g., Recital Rehearsal" />

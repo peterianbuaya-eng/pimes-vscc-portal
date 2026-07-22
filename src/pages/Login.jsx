@@ -6,28 +6,28 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAppContext();
   
-  const [tab, setTab] = useState('admin'); // 'admin' or 'student'
-  const [username, setUsername] = useState('');
+  const [tab, setTab] = useState('admin');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     
-    const success = login(tab, username, password);
+    const result = await login(email, password);
     
-    if (success) {
-      if (tab === 'admin') navigate('/');
-      else navigate('/portal');
+    if (result.success) {
+      // Auth state redirects to the correct role after the profile loads.
+      navigate(tab === 'admin' ? '/' : '/portal');
     } else {
-      setError('Invalid username or password');
+      setError(result.message || 'Invalid email or password');
     }
   };
 
   const switchTab = (newTab) => {
     setTab(newTab);
-    setUsername('');
+    setEmail('');
     setPassword('');
     setError('');
   };
@@ -56,8 +56,8 @@ const Login = () => {
 
         <form onSubmit={handleLogin} style={{ textAlign: 'left' }}>
           <div className="form-group">
-            <label className="form-label">Username</label>
-            <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder="Enter username" />
+            <label className="form-label">Email address</label>
+            <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="name@example.com" />
           </div>
           <div className="form-group">
             <label className="form-label">Password</label>

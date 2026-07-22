@@ -3,7 +3,7 @@ import { useAppContext } from '../context/AppContext';
 import { CreditCard, Calendar, Upload, AlertCircle } from 'lucide-react';
 
 const StudentPortal = () => {
-  const { currentUser, students, attendance, payments, reminders, notifications, markNotificationRead, updateStudent } = useAppContext();
+  const { currentUser, students, attendance, payments, reminders, notifications, markNotificationRead, updatePassword } = useAppContext();
   const [activeTab, setActiveTab] = useState('overview');
   
   const student = students.find(s => s.id === currentUser?.id);
@@ -11,11 +11,12 @@ const StudentPortal = () => {
 
   if (!student) return <div>Loading...</div>;
 
-  const handleUpdatePassword = (e) => {
+  const handleUpdatePassword = async (e) => {
     e.preventDefault();
-    if (newPassword.trim().length < 3) return alert('Password must be at least 3 characters.');
-    updateStudent(student.id, { password: newPassword });
-    alert('Password updated successfully!');
+    if (newPassword.trim().length < 8) return alert('Password must be at least 8 characters.');
+    const { error } = await updatePassword(newPassword);
+    if (error) return alert(error.message);
+    alert('Password updated successfully.');
     setNewPassword('');
   };
 
@@ -196,8 +197,8 @@ const StudentPortal = () => {
                 <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>Account Settings</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginBottom: '32px' }}>
                   <div style={{ backgroundColor: 'var(--color-bg-subtle)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                    <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Your Username</div>
-                    <div style={{ fontWeight: '500', fontSize: '16px' }}>{student.username}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Your email</div>
+                    <div style={{ fontWeight: '500', fontSize: '16px' }}>{currentUser.email}</div>
                   </div>
                 </div>
 
@@ -206,7 +207,7 @@ const StudentPortal = () => {
                   <div className="form-group">
                     <label className="form-label">New Password</label>
                     <input 
-                      type="text" 
+                      type="password" 
                       className="form-control" 
                       value={newPassword} 
                       onChange={(e) => setNewPassword(e.target.value)} 
