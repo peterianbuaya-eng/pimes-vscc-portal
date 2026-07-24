@@ -52,7 +52,7 @@ const StudentsList = () => {
                 <tr><td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '32px' }}>No students found</td></tr>
               )}
               {filtered.map(student => (
-                <tr key={student.id} onClick={() => navigate(`/students/${student.id}`)} style={{ cursor: 'pointer' }}>
+                <tr key={student.id} onClick={() => navigate(`/admin/students/${student.id}`)} style={{ cursor: 'pointer' }}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <img src={student.photo} alt={student.name} className="avatar" />
