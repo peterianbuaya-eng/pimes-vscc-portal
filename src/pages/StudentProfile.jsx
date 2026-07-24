@@ -206,23 +206,16 @@ const StudentProfile = () => {
                 </div>
 
                 <h3 style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 700 }}>History</h3>
-                <div className="table-responsive">
-                  <table className="data-table">
-                    <thead><tr><th>Date</th><th>Status</th></tr></thead>
-                    <tbody>
-                      {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                      {studentAttendance.map(record => (
-                        <tr key={record.id}>
-                          <td style={{ fontSize: '13px' }}>{record.date}</td>
-                          <td>
-                            <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
-                              {record.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div style={{ display: 'grid', gap: '8px' }}>
+                  {studentAttendance.length === 0 && <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No records found</div>}
+                  {studentAttendance.map(record => (
+                    <div key={record.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
+                      <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-main)' }}>{record.date}</span>
+                      <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
+                        {record.status}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

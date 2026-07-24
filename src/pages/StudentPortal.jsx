@@ -376,35 +376,32 @@ const StudentPortal = () => {
       {activeTab === 'attendance' && (
         <div className="card animate-in">
           <h3 style={{ fontSize: '15px', marginBottom: '12px', fontWeight: 700 }}>Attendance Record</h3>
-          <div className="table-responsive">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {studentAttendance.length === 0 && <tr><td colSpan="2" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                {studentAttendance.map(record => (
-                  <tr key={record.id}>
-                    <td>{record.date}</td>
-                    <td>
-                      <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
-                        {record.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div style={{ display: 'grid', gap: '8px' }}>
+            {studentAttendance.length === 0 && <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No records found</div>}
+            {studentAttendance.map(record => (
+              <div key={record.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
+                <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-main)' }}>{record.date}</span>
+                <span className={`badge ${record.status === 'Present' ? 'badge-success' : record.status === 'Absent' ? 'badge-danger' : record.status === 'Late' ? 'badge-warning' : 'badge-primary'}`}>
+                  {record.status}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       {activeTab === 'payments' && (
         <div className="card animate-in">
-          <h3 style={{ fontSize: '15px', marginBottom: '12px', fontWeight: 700 }}>Payment History</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0 }}>Payment History</h3>
+            <button
+              className="btn btn-primary"
+              style={{ fontSize: '13px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              onClick={() => setShowUploadModal(true)}
+            >
+              <CreditCard size={15} /> Submit GCash Receipt
+            </button>
+          </div>
           <div style={{ display: 'grid', gap: '12px' }}>
             {studentPayments.length === 0 && <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No records found</div>}
             {studentPayments.map(record => (
