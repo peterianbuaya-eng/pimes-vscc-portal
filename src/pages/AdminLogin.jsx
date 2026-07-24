@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { Music, AlertCircle } from 'lucide-react';
+import { Shield, AlertCircle } from 'lucide-react';
 
-const Login = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
   const { login } = useAppContext();
   
@@ -20,21 +20,21 @@ const Login = () => {
     const result = await login(email, password);
     
     if (result.success) {
-      navigate('/portal');
+      navigate('/');
     } else {
-      setError(result.message || 'Invalid username or password');
+      setError(result.message || 'Invalid credentials');
     }
     setIsLoading(false);
   };
 
   return (
     <div className="login-page">
-      <div className="login-card login-card-student animate-in">
+      <div className="login-card login-card-admin animate-in">
         <div className="login-logo" style={{ background: 'none', width: '72px', height: '72px', borderRadius: '0', marginBottom: '24px' }}>
           <img src="/vscc_logo.png" alt="VSCC Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </div>
-        <h2 style={{ color: 'var(--color-text-main)' }}>Student Portal</h2>
-        <div className="login-subtitle">PIMES Violin & Strings Chamber Class</div>
+        <h2>Admin Portal</h2>
+        <div className="login-subtitle">PIMES VSCC Management System</div>
 
         {error && (
           <div style={{ 
@@ -56,14 +56,14 @@ const Login = () => {
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label className="form-label">Username or Email</label>
+            <label className="form-label">Email Address</label>
             <input 
-              type="text" 
+              type="email" 
               className="form-control" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               required 
-              placeholder="e.g. fbuaya"
+              placeholder="admin@pimes.com"
               disabled={isLoading}
             />
           </div>
@@ -81,15 +81,8 @@ const Login = () => {
           </div>
           <button 
             type="submit" 
-            className="btn" 
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              fontSize: '14px', 
-              marginTop: '8px',
-              backgroundColor: 'var(--color-secondary)',
-              color: '#0a0a0a'
-            }}
+            className="btn btn-primary" 
+            style={{ width: '100%', padding: '12px', fontSize: '14px', marginTop: '8px' }}
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
@@ -98,11 +91,11 @@ const Login = () => {
 
         <div style={{ textAlign: 'center', marginTop: '24px' }}>
           <a 
-            href="/admin/login" 
+            href="/login" 
             style={{ color: 'var(--color-text-secondary)', fontSize: '13px', textDecoration: 'none' }}
-            onClick={(e) => { e.preventDefault(); navigate('/admin/login'); }}
+            onClick={(e) => { e.preventDefault(); navigate('/login'); }}
           >
-            Admin? Login here →
+            Student? Login here →
           </a>
         </div>
       </div>
@@ -110,4 +103,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

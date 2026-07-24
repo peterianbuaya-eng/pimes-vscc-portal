@@ -1,25 +1,15 @@
 import React from 'react';
-import { Calendar as CalendarIcon, FileBarChart } from 'lucide-react';
-
-export const CalendarView = () => {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-      <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-        <CalendarIcon size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
-        <h2>Calendar View</h2>
-        <p>Full calendar module coming soon.</p>
-      </div>
-    </div>
-  );
-};
+import { FileBarChart } from 'lucide-react';
 
 export const ReportsView = () => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
       <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-        <FileBarChart size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
-        <h2>Reports View</h2>
-        <p>Advanced PDF generation and reports coming soon.</p>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'var(--color-primary-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+          <FileBarChart size={28} color="var(--color-primary)" />
+        </div>
+        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '8px' }}>Reports View</h2>
+        <p style={{ fontSize: '13px' }}>Advanced PDF generation and reports coming soon.</p>
       </div>
     </div>
   );

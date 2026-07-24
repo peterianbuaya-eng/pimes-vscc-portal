@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import StudentLayout from './components/StudentLayout';
 
 import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 import StudentsList from './pages/StudentsList';
 import StudentProfile from './pages/StudentProfile';
@@ -16,9 +17,23 @@ import StudentPortal from './pages/StudentPortal';
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const { currentUser, loading } = useAppContext();
-  if (loading) return <div style={{ padding: '32px' }}>Loading portal…</div>;
+  if (loading) return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100dvh',
+      background: 'var(--color-bg-main)',
+      color: 'var(--color-text-secondary)',
+      fontWeight: 500
+    }}>
+      Loading portal…
+    </div>
+  );
   
-  if (!currentUser) return <Navigate to="/login" replace />;
+  if (!currentUser) {
+    return <Navigate to={allowedRole === 'admin' ? '/admin/login' : '/login'} replace />;
+  }
   if (currentUser.role !== allowedRole) {
     return <Navigate to={currentUser.role === 'admin' ? '/' : '/portal'} replace />;
   }
@@ -29,7 +44,9 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Separate Login Pages */}
       <Route path="/login" element={<Login />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
       
       {/* Admin Routes */}
       <Route path="/" element={<ProtectedRoute allowedRole="admin"><Layout /></ProtectedRoute>}>

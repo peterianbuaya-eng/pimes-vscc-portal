@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Users, BookOpen, AlertCircle, TrendingUp, Bell } from 'lucide-react';
+import { Users, BookOpen, AlertCircle, TrendingUp, Bell, X } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Modal = ({ title, onClose, children }) => (
-  <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-    <div className="card" style={{ width: '90%', maxWidth: '500px', maxHeight: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+  <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)', padding: '16px' }}>
+    <div className="card animate-in" style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
-        <h2 style={{ fontSize: '18px', margin: 0 }}>{title}</h2>
-        <button className="btn btn-outline" style={{ padding: '4px 8px', borderColor: 'transparent' }} onClick={onClose}>✕</button>
+        <h2 style={{ fontSize: '18px', margin: 0, fontWeight: 700 }}>{title}</h2>
+        <button className="btn btn-outline" style={{ padding: '4px 8px', borderColor: 'transparent' }} onClick={onClose}>
+          <X size={16} />
+        </button>
       </div>
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {children}
@@ -25,14 +27,30 @@ const Dashboard = () => {
   // Simple aggregations
   const totalStudents = students.length;
   
-  // Mock today's lessons (for demo, just picking Monday schedule)
-  const todaysLessonsList = students.filter(s => s.schedule && s.schedule.includes('Monday'));
+  const todayName = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date());
+  const todaysLessonsList = students.filter(s => s.schedule && s.schedule.includes(todayName));
   const todaysLessons = todaysLessonsList.length;
-  
-  // Mock unpaid students
+
+  const today = new Date();
+  const selectedYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const paidPayments = payments.filter(payment => payment.status === 'Paid' || payment.status === 'Partial');
+  const monthlyChartData = monthNames.map((name, monthIndex) => ({
+    name,
+    income: paidPayments.filter(payment => {
+      const paymentDate = new Date(`${payment.date}T00:00:00`);
+      return paymentDate.getFullYear() === selectedYear && paymentDate.getMonth() === monthIndex;
+    }).reduce((sum, payment) => sum + payment.amount, 0)
+  }));
+  const currentMonthIncome = monthlyChartData[currentMonth].income;
+
   const unpaidStudentsList = students.filter(s => {
-    const studentPayments = payments.filter(p => p.studentId === s.id);
-    return !studentPayments.some(p => p.status === 'Paid');
+    const paidThisMonth = paidPayments.filter(payment => {
+      const paymentDate = new Date(`${payment.date}T00:00:00`);
+      return payment.studentId === s.id && paymentDate.getFullYear() === selectedYear && paymentDate.getMonth() === currentMonth;
+    }).reduce((sum, payment) => sum + payment.amount, 0);
+    return paidThisMonth < s.monthlyFee;
   });
   const unpaidStudents = unpaidStudentsList.length;
 
@@ -41,73 +59,95 @@ const Dashboard = () => {
     alert("Notification sent to student portal!");
   };
 
-  const monthlyIncome = payments.filter(p => p.status === 'Paid' || p.status === 'Partial')
-                                 .reduce((sum, p) => sum + p.amount, 0);
-
-  const mockChartData = [
-    { name: 'Jan', income: 32000 },
-    { name: 'Feb', income: 35000 },
-    { name: 'Mar', income: 40000 },
-    { name: 'Apr', income: 41000 },
-    { name: 'May', income: 38000 },
-    { name: 'Jun', income: 43000 },
-    { name: 'Jul', income: monthlyIncome },
-  ];
-
   return (
     <div>
-      <h1 style={{ marginBottom: '24px', fontSize: '24px' }}>Dashboard Overview</h1>
+      <h1 style={{ marginBottom: '20px', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.03em' }}>Dashboard Overview</h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', marginBottom: '32px' }}>
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ padding: '12px', backgroundColor: 'rgba(0, 115, 234, 0.1)', borderRadius: '8px', color: 'var(--color-primary)' }}>
-            <Users size={24} />
+      {/* Stat Cards Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        {/* Total Students */}
+        <div className="card stat-card">
+          <div className="stat-icon stat-icon-green">
+            <Users size={22} />
           </div>
           <div>
-            <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Total Students</div>
-            <div style={{ fontSize: '28px', fontWeight: '700' }}>{totalStudents}</div>
+            <div className="stat-label">Total Students</div>
+            <div className="stat-value">{totalStudents}</div>
           </div>
         </div>
 
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', transition: 'box-shadow 0.2s' }} onClick={() => setShowLessonsModal(true)}>
-          <div style={{ padding: '12px', backgroundColor: 'rgba(0, 200, 117, 0.1)', borderRadius: '8px', color: 'var(--color-success)' }}>
-            <BookOpen size={24} />
+        {/* Today's Lessons */}
+        <div className="card stat-card" style={{ cursor: 'pointer' }} onClick={() => setShowLessonsModal(true)}>
+          <div className="stat-icon stat-icon-orange">
+            <BookOpen size={22} />
           </div>
           <div>
-            <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Today's Lessons</div>
-            <div style={{ fontSize: '28px', fontWeight: '700' }}>{todaysLessons}</div>
+            <div className="stat-label">{todayName}'s Lessons</div>
+            <div className="stat-value">{todaysLessons}</div>
           </div>
         </div>
 
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', transition: 'box-shadow 0.2s' }} onClick={() => setShowUnpaidModal(true)}>
-          <div style={{ padding: '12px', backgroundColor: 'rgba(226, 68, 92, 0.1)', borderRadius: '8px', color: 'var(--color-danger)' }}>
-            <AlertCircle size={24} />
+        {/* Unpaid Fees */}
+        <div className="card stat-card" style={{ cursor: 'pointer' }} onClick={() => setShowUnpaidModal(true)}>
+          <div className="stat-icon stat-icon-red">
+            <AlertCircle size={22} />
           </div>
           <div>
-            <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Unpaid Fees</div>
-            <div style={{ fontSize: '28px', fontWeight: '700' }}>{unpaidStudents}</div>
+            <div className="stat-label">Unpaid This Month</div>
+            <div className="stat-value">{unpaidStudents}</div>
           </div>
         </div>
 
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ padding: '12px', backgroundColor: 'rgba(253, 171, 61, 0.1)', borderRadius: '8px', color: 'var(--color-warning)' }}>
-            <TrendingUp size={24} />
+        {/* Month Income */}
+        <div className="card stat-card">
+          <div className="stat-icon stat-icon-green">
+            <TrendingUp size={22} />
           </div>
           <div>
-            <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Monthly Income</div>
-            <div style={{ fontSize: '28px', fontWeight: '700' }}>₱{monthlyIncome.toLocaleString()}</div>
+            <div className="stat-label">{monthNames[currentMonth]} Income</div>
+            <div className="stat-value" style={{ fontSize: '22px' }}>₱{currentMonthIncome.toLocaleString()}</div>
           </div>
         </div>
       </div>
 
-      <div className="card" style={{ height: '400px' }}>
-        <h3 style={{ marginBottom: '24px', fontSize: '16px' }}>Income Overview (2026)</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={mockChartData}>
-            <XAxis dataKey="name" stroke="var(--color-text-secondary)" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="var(--color-text-secondary)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `₱${val/1000}k`} />
-            <Tooltip cursor={{fill: 'var(--color-bg-subtle)'}} contentStyle={{ borderRadius: '8px', border: '1px solid var(--color-border)' }} />
-            <Bar dataKey="income" fill="var(--color-primary)" radius={[4, 4, 0, 0]} barSize={40} />
+      {/* Chart Card */}
+      <div className="card" style={{ height: '360px' }}>
+        <h3 style={{ marginBottom: '16px', fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)' }}>
+          Income Overview ({selectedYear})
+        </h3>
+        <ResponsiveContainer width="100%" height="85%">
+          <BarChart data={monthlyChartData}>
+            <XAxis 
+              dataKey="name" 
+              stroke="var(--color-text-muted)" 
+              fontSize={11} 
+              tickLine={false} 
+              axisLine={false} 
+            />
+            <YAxis 
+              stroke="var(--color-text-muted)" 
+              fontSize={11} 
+              tickLine={false} 
+              axisLine={false} 
+              tickFormatter={(val) => `₱${val/1000}k`} 
+            />
+            <Tooltip 
+              cursor={{ fill: 'rgba(124, 235, 60, 0.05)' }} 
+              contentStyle={{ 
+                borderRadius: '12px', 
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-bg-card)',
+                color: 'var(--color-text-main)',
+                boxShadow: 'var(--shadow-md)'
+              }}
+              labelStyle={{ color: 'var(--color-text-secondary)' }}
+            />
+            <Bar 
+              dataKey="income" 
+              fill="var(--color-primary)" 
+              radius={[8, 8, 8, 8]} 
+              barSize={32}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -117,12 +157,12 @@ const Dashboard = () => {
           {todaysLessonsList.length === 0 ? (
             <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No lessons scheduled for today.</div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {todaysLessonsList.map(s => (
-                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: '8px' }}>
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
                   <img src={s.photo} alt={s.name} className="avatar" />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '500' }}>{s.name}</div>
+                    <div style={{ fontWeight: '600', fontSize: '14px' }}>{s.name}</div>
                     <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>{s.schedule}</div>
                   </div>
                 </div>
@@ -137,15 +177,15 @@ const Dashboard = () => {
           {unpaidStudentsList.length === 0 ? (
             <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>All students have paid their fees!</div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {unpaidStudentsList.map(s => (
-                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: '8px' }}>
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
                   <img src={s.photo} alt={s.name} className="avatar" />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '500' }}>{s.name}</div>
+                    <div style={{ fontWeight: '600', fontSize: '14px' }}>{s.name}</div>
                     <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>₱{s.monthlyFee?.toLocaleString()} Due</div>
                   </div>
-                  <button className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '12px' }} onClick={() => handleSendNotification(s.id)}>
+                  <button className="btn btn-outline" style={{ padding: '6px 10px', fontSize: '11px' }} onClick={() => handleSendNotification(s.id)}>
                     <Bell size={14} /> Remind
                   </button>
                 </div>
@@ -159,3 +199,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

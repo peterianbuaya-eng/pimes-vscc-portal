@@ -6,6 +6,12 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   role text not null check (role in ('admin', 'student')) default 'student',
   student_id uuid unique,
+<<<<<<< HEAD
+=======
+  username text unique,
+  contact_email text,
+  must_change_password boolean not null default false,
+>>>>>>> 62145fb (redesign: VSCC black and gold theme, separate admin/student portals, mobile bottom tabs)
   created_at timestamptz not null default now()
 );
 
@@ -82,6 +88,24 @@ create trigger on_auth_user_created after insert on auth.users
 insert into public.profiles (id)
 select id from auth.users on conflict (id) do nothing;
 
+<<<<<<< HEAD
+=======
+-- Apply these columns if the profiles table was created before this version.
+alter table public.profiles add column if not exists username text unique;
+alter table public.profiles add column if not exists contact_email text;
+alter table public.profiles add column if not exists must_change_password boolean not null default false;
+
+create or replace function public.complete_student_setup(student_email text)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  update public.profiles
+  set contact_email = student_email, must_change_password = false
+  where id = auth.uid() and role = 'student';
+end;
+$$;
+grant execute on function public.complete_student_setup(text) to authenticated;
+
+>>>>>>> 62145fb (redesign: VSCC black and gold theme, separate admin/student portals, mobile bottom tabs)
 alter table public.profiles enable row level security;
 alter table public.students enable row level security;
 alter table public.attendance enable row level security;
@@ -93,10 +117,18 @@ create policy "Profiles visible to owner or admin" on public.profiles for select
 create policy "Admins manage profiles" on public.profiles for all using (public.is_admin()) with check (public.is_admin());
 create policy "Admins manage students" on public.students for all using (public.is_admin()) with check (public.is_admin());
 create policy "Students view own record" on public.students for select using (id = (select student_id from public.profiles where id = auth.uid()));
+<<<<<<< HEAD
+=======
+create policy "Students update own record" on public.students for update using (id = (select student_id from public.profiles where id = auth.uid())) with check (id = (select student_id from public.profiles where id = auth.uid()));
+>>>>>>> 62145fb (redesign: VSCC black and gold theme, separate admin/student portals, mobile bottom tabs)
 create policy "Admins manage attendance" on public.attendance for all using (public.is_admin()) with check (public.is_admin());
 create policy "Students view own attendance" on public.attendance for select using (student_id = (select student_id from public.profiles where id = auth.uid()));
 create policy "Admins manage payments" on public.payments for all using (public.is_admin()) with check (public.is_admin());
 create policy "Students view own payments" on public.payments for select using (student_id = (select student_id from public.profiles where id = auth.uid()));
+<<<<<<< HEAD
+=======
+create policy "Students submit own payments" on public.payments for insert with check (student_id = (select student_id from public.profiles where id = auth.uid()) and status = 'Unpaid');
+>>>>>>> 62145fb (redesign: VSCC black and gold theme, separate admin/student portals, mobile bottom tabs)
 create policy "Admins manage reminders" on public.reminders for all using (public.is_admin()) with check (public.is_admin());
 create policy "Students view reminders" on public.reminders for select using (auth.uid() is not null);
 create policy "Admins manage notifications" on public.notifications for all using (public.is_admin()) with check (public.is_admin());
