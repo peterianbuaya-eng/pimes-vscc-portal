@@ -405,45 +405,39 @@ const StudentPortal = () => {
       {activeTab === 'payments' && (
         <div className="card animate-in">
           <h3 style={{ fontSize: '15px', marginBottom: '12px', fontWeight: 700 }}>Payment History</h3>
-          <div className="table-responsive">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Method</th>
-                  <th>Receipt</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {studentPayments.length === 0 && <tr><td colSpan="5" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                {studentPayments.map(record => (
-                  <tr key={record.id}>
-                    <td style={{ fontSize: '13px' }}>{record.date}</td>
-                    <td style={{ fontSize: '13px' }}>₱{record.amount.toLocaleString()}</td>
-                    <td style={{ fontSize: '13px' }}>{record.method}</td>
-                    <td>
-                      {record.receipt && (record.receipt.startsWith('data:image/') || record.receipt.startsWith('http')) ? (
-                        <button 
-                          onClick={() => setViewingReceipt(record.receipt)} 
-                          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--color-secondary)', textDecoration: 'underline', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
-                        >
-                          View
-                        </button>
-                      ) : (
-                        <span style={{ fontSize: '12px' }}>{record.receipt || '-'}</span>
-                      )}
-                    </td>
-                    <td>
-                      <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
-                        {record.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {studentPayments.length === 0 && <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No records found</div>}
+            {studentPayments.map(record => (
+              <div key={record.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontWeight: '600', fontSize: '14px', color: 'var(--color-text-main)' }}>{record.date}</span>
+                  <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
+                    {record.status}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Amount:</span>
+                  <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--color-primary)' }}>₱{record.amount.toLocaleString()}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Method:</span>
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>{record.method}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Receipt:</span>
+                  {record.receipt && (record.receipt.startsWith('data:image/') || record.receipt.startsWith('http')) ? (
+                    <button 
+                      onClick={() => setViewingReceipt(record.receipt)} 
+                      style={{ background: 'none', border: 'none', padding: 0, color: 'var(--color-secondary)', textDecoration: 'underline', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}
+                    >
+                      View Receipt
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>{record.receipt || '-'}</span>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

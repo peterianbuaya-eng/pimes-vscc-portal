@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     return <Navigate to={allowedRole === 'admin' ? '/admin/login' : '/login'} replace />;
   }
   if (currentUser.role !== allowedRole) {
-    return <Navigate to={currentUser.role === 'admin' ? '/' : '/portal'} replace />;
+    return <Navigate to={currentUser.role === 'admin' ? '/admin' : '/'} replace />;
   }
   
   return children;
@@ -49,7 +49,7 @@ const AppRoutes = () => {
       <Route path="/admin/login" element={<AdminLogin />} />
       
       {/* Admin Routes */}
-      <Route path="/" element={<ProtectedRoute allowedRole="admin"><Layout /></ProtectedRoute>}>
+      <Route path="/admin" element={<ProtectedRoute allowedRole="admin"><Layout /></ProtectedRoute>}>
         <Route index element={<Dashboard />} />
         <Route path="students" element={<StudentsList />} />
         <Route path="students/new" element={<AddStudent />} />
@@ -59,7 +59,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Student Routes */}
-      <Route path="/portal" element={<ProtectedRoute allowedRole="student"><StudentLayout /></ProtectedRoute>}>
+      <Route path="/" element={<ProtectedRoute allowedRole="student"><StudentLayout /></ProtectedRoute>}>
         <Route index element={<StudentPortal />} />
       </Route>
 

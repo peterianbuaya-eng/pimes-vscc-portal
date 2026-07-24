@@ -20,7 +20,7 @@ const Login = () => {
     const result = await login(email, password);
     
     if (result.success) {
-      navigate('/portal');
+      navigate('/');
     } else {
       setError(result.message || 'Invalid username or password');
     }
