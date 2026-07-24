@@ -236,63 +236,54 @@ const StudentProfile = () => {
                   </button>
                 </div>
                 
-                <div className="table-responsive">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Method</th>
-                        <th>Receipt</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {studentPayments.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>No records found</td></tr>}
-                      {studentPayments.map(record => (
-                        <tr key={record.id}>
-                          <td style={{ fontSize: '13px' }}>{record.date}</td>
-                          <td style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-primary)' }}>₱{record.amount.toLocaleString()}</td>
-                          <td style={{ fontSize: '13px' }}>{record.method}</td>
-                          <td>
-                            {record.receipt && (record.receipt.startsWith('data:image/') || record.receipt.startsWith('http')) ? (
-                              <button onClick={() => setViewingReceipt(record.receipt)} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--color-primary)', textDecoration: 'underline', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}>
-                                View
-                              </button>
-                            ) : (
-                              <span style={{ fontSize: '12px' }}>{record.receipt || '-'}</span>
-                            )}
-                          </td>
-                          <td>
-                            <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
-                              {record.status}
-                            </span>
-                          </td>
-                          <td>
-                            <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                              {record.status !== 'Paid' && (
-                                <button 
-                                  className="btn btn-primary" 
-                                  style={{ padding: '3px 8px', fontSize: '11px', backgroundColor: 'var(--color-success)' }}
-                                  onClick={async () => { await updatePaymentStatus(record.id, 'Paid'); alert('GCash payment approved!'); }}
-                                >
-                                  <Check size={12} /> Approve
-                                </button>
-                              )}
-                              <button 
-                                className="btn btn-outline" 
-                                style={{ padding: '3px 8px', fontSize: '11px', color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
-                                onClick={() => removePayment(record.id)}
-                              >
-                                <X size={12} /> Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div style={{ display: 'grid', gap: '12px' }}>
+                  {studentPayments.length === 0 && <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '20px' }}>No records found</div>}
+                  {studentPayments.map(record => (
+                    <div key={record.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-subtle)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: '600', fontSize: '14px', color: 'var(--color-text-main)' }}>{record.date}</span>
+                        <span className={`badge ${record.status === 'Paid' ? 'badge-success' : record.status === 'Partial' ? 'badge-warning' : 'badge-danger'}`}>
+                          {record.status}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Amount:</span>
+                        <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--color-primary)' }}>₱{record.amount.toLocaleString()}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Method:</span>
+                        <span style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>{record.method}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Receipt:</span>
+                        {record.receipt && (record.receipt.startsWith('data:image/') || record.receipt.startsWith('http')) ? (
+                          <button onClick={() => setViewingReceipt(record.receipt)} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--color-primary)', textDecoration: 'underline', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}>
+                            View Receipt
+                          </button>
+                        ) : (
+                          <span style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>{record.receipt || '-'}</span>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '4px', paddingTop: '8px', borderTop: '1px solid var(--color-border)' }}>
+                        {record.status !== 'Paid' && (
+                          <button 
+                            className="btn btn-primary" 
+                            style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: 'var(--color-success)' }}
+                            onClick={async () => { await updatePaymentStatus(record.id, 'Paid'); alert('GCash payment approved!'); }}
+                          >
+                            <Check size={14} /> Approve
+                          </button>
+                        )}
+                        <button 
+                          className="btn btn-outline" 
+                          style={{ padding: '6px 12px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                          onClick={() => removePayment(record.id)}
+                        >
+                          <X size={14} /> Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
