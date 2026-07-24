@@ -59,19 +59,19 @@ const Layout = () => {
           </button>
         </div>
         <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px', width: '100%', alignItems: 'center' }}>
-          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end title="Dashboard">
+          <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end title="Dashboard">
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
           </NavLink>
-          <NavLink to="/students" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Students">
+          <NavLink to="/admin/students" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Students">
             <Users size={20} />
             <span>Students</span>
           </NavLink>
-          <NavLink to="/calendar" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Calendar">
+          <NavLink to="/admin/calendar" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Calendar">
             <CalendarDays size={20} />
             <span>Calendar</span>
           </NavLink>
-          <NavLink to="/reports" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Reports">
+          <NavLink to="/admin/reports" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Reports">
             <FileBarChart size={20} />
             <span>Reports</span>
           </NavLink>

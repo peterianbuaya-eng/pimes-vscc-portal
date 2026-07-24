@@ -17,7 +17,7 @@ const StudentsList = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '12px', flexWrap: 'wrap' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.03em' }}>Students Directory</h1>
-        <button className="btn btn-primary" onClick={() => navigate('/students/new')}>
+        <button className="btn btn-primary" onClick={() => navigate('/admin/students/new')}>
           <Plus size={16} /> Add Student
         </button>
       </div>

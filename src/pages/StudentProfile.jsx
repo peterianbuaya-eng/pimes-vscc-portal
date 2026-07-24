@@ -74,7 +74,7 @@ const StudentProfile = () => {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-        <button className="btn btn-outline" onClick={() => navigate('/students')} style={{ padding: '7px' }}>
+        <button className="btn btn-outline" onClick={() => navigate('/admin/students')} style={{ padding: '7px' }}>
           <ArrowLeft size={16} />
         </button>
         <h1 style={{ fontSize: '22px', margin: 0, fontWeight: 800, letterSpacing: '-0.03em' }}>Student Profile</h1>

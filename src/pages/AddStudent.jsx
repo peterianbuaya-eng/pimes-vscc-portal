@@ -34,7 +34,7 @@ const AddStudent = () => {
         });
       } else {
         await addStudent({ ...form, monthlyFee: Number(form.monthlyFee) });
-        navigate('/students');
+        navigate('/admin/students');
       }
     } catch (err) { 
       setError(err.message); 
@@ -93,7 +93,7 @@ const AddStudent = () => {
               {copied ? <Check size={15} color="var(--color-success)" /> : <Copy size={15} />}
               {copied ? 'Copied!' : 'Copy Info'}
             </button>
-            <button className="btn btn-primary" style={{ minWidth: '130px', fontSize: '13px' }} onClick={() => navigate('/students')}>
+            <button className="btn btn-primary" style={{ minWidth: '130px', fontSize: '13px' }} onClick={() => navigate('/admin/students')}>
               Done
             </button>
           </div>
@@ -154,7 +154,7 @@ const AddStudent = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button type="button" className="btn btn-outline" style={{ fontSize: '13px' }} onClick={() => navigate('/students')} disabled={isLoading}>
+          <button type="button" className="btn btn-outline" style={{ fontSize: '13px' }} onClick={() => navigate('/admin/students')} disabled={isLoading}>
             Cancel
           </button>
           <button className="btn btn-primary" type="submit" style={{ fontSize: '13px' }} disabled={isLoading}>
