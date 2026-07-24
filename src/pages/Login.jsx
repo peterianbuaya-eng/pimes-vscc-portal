@@ -34,7 +34,7 @@ const Login = () => {
           <img src="/vscc_logo.png" alt="VSCC Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </div>
         <h2 style={{ color: 'var(--color-text-main)' }}>Student Portal</h2>
-        <div className="login-subtitle">PIMES Violin & Strings Chamber Class</div>
+        <div className="login-subtitle">PIMES Voices of the South Children's Choir</div>
 
         {error && (
           <div style={{ 
