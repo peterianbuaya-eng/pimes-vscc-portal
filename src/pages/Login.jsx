@@ -96,15 +96,6 @@ const Login = () => {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
-          <a 
-            href="/admin/login" 
-            style={{ color: 'var(--color-text-secondary)', fontSize: '13px', textDecoration: 'none' }}
-            onClick={(e) => { e.preventDefault(); navigate('/admin/login'); }}
-          >
-            Admin? Login here →
-          </a>
-        </div>
       </div>
     </div>
   );

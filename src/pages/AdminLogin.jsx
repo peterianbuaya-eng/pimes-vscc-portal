@@ -89,15 +89,6 @@ const AdminLogin = () => {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
-          <a 
-            href="/login" 
-            style={{ color: 'var(--color-text-secondary)', fontSize: '13px', textDecoration: 'none' }}
-            onClick={(e) => { e.preventDefault(); navigate('/login'); }}
-          >
-            Student? Login here →
-          </a>
-        </div>
       </div>
     </div>
   );
